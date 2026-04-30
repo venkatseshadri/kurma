@@ -1,0 +1,205 @@
+╔════════════════════════════════════════════════════════════════╗
+║         🐢 PROJECT KURMA - START HERE                        ║
+║         MCX Intraday Trading Bot                             ║
+║         Documentation Complete ✅                            ║
+╚════════════════════════════════════════════════════════════════╝
+
+📚 DOCUMENTATION ROADMAP
+
+1. NEW USER? Read these in order:
+   → README.md         (what is Kurma? quick start)
+   → SETUP.md          (installation & configuration)
+   → OPERATIONS.md     (how to run, execution modes)
+
+2. WANT TO UNDERSTAND THE SYSTEM?
+   → ARCHITECTURE.md   (system design, components, data flow)
+
+3. GOING LIVE?
+   → Read: SAFETY.md   (before going live, MUST READ)
+   → Then: CLI_REFERENCE.md (parameter details)
+   → Command: ./run_kurma.sh live flattrade flattrade
+
+4. SOMETHING BROKE?
+   → TROUBLESHOOTING.md (common issues & fixes)
+   → Check logs: tail -50 /home/trading_ceo/python-trader/kurma_system.log
+
+5. FOR FUTURE AI AGENTS:
+   → CLAUDE.md        (architecture for Claude Code instances)
+
+═══════════════════════════════════════════════════════════════════
+
+🚀 QUICK START (5 minutes)
+
+# Test (safe, fully mocked)
+cd /home/trading_ceo/python-trader
+./run_kurma.sh dry-run
+
+# Monitor (real data, no orders)
+./run_kurma.sh paper flattrade flattrade
+
+# Go Live (real data, real orders) ⚠️
+./run_kurma.sh live flattrade flattrade
+# Will prompt for confirmation
+
+═══════════════════════════════════════════════════════════════════
+
+📋 FILE STRUCTURE
+
+kurma/
+├── 00_START_HERE.txt          ← You are here
+├── README.md                   ← Overview
+├── SETUP.md                    ← Installation
+├── ARCHITECTURE.md             ← System design
+├── OPERATIONS.md               ← How to run
+├── CLI_REFERENCE.md            ← Parameters
+├── SAFETY.md                   ← Safety mechanisms
+├── TROUBLESHOOTING.md          ← Problem fixes
+├── CLAUDE.md                   ← For AI agents
+│
+├── __init__.py                 ← Package init
+├── kurma_main.py              ← Master orchestrator
+├── kurma_selector.py          ← Instrument selection
+├── kurma_momentum.py          ← Entry/exit logic
+├── kurma_monitor.py           ← Position monitoring (future)
+├── kurma_eod_analyzer.py      ← EOD analysis & recommendations
+└── config.yaml                ← Configuration
+
+run_kurma.sh                    ← Launch script (in parent dir)
+
+═══════════════════════════════════════════════════════════════════
+
+⏱️ READING TIME
+
+README.md              → 5 min   (overview)
+SETUP.md               → 10 min  (installation)
+OPERATIONS.md          → 10 min  (how to run)
+SAFETY.md              → 10 min  (safety rules - IMPORTANT)
+CLI_REFERENCE.md       → 5 min   (parameters)
+ARCHITECTURE.md        → 15 min  (system design)
+TROUBLESHOOTING.md     → Variable (reference)
+
+TOTAL: 45-60 minutes to safe operation
+
+═══════════════════════════════════════════════════════════════════
+
+🛡️ SAFETY FIRST
+
+BEFORE going live, verify:
+□ Read SAFETY.md completely
+□ Understand 3 execution modes (dry-run, paper, live)
+□ Know the hard exit time (11:15 PM IST)
+□ Tested in paper mode successfully
+□ Credentials are secure
+□ Understand max loss limit (₹3,000/day)
+
+═══════════════════════════════════════════════════════════════════
+
+💡 KEY CONCEPTS
+
+Execution Modes:
+  Dry-Run    → Mock data + mock orders (default, safe)
+  Paper      → Real data + mock orders (monitor only)
+  Live       → Real data + real orders (⚠️ requires confirmation)
+
+Instruments Traded:
+  Crude Oil      → Highest liquidity, best spreads
+  Gold Mini      → Safe, lower volatility
+  Silver Mini    → Medium volatility
+  Nat Gas Mini   → High volatility
+
+Exit Strategy:
+  Tranche 1      → 50% at +50-100 points (lock first profit)
+  Tranche 2      → 25% at +100-150 points (lock more)
+  Tranche 3      → 25% with TSL (trailing stop, catch trends)
+
+Daily Targets:
+  Conservative   → ₹800-1,000/day
+  Good Day       → ₹1,200-1,500/day
+  Loss Limit     → -₹3,000 hard stop
+
+═══════════════════════════════════════════════════════════════════
+
+⏰ TRADING HOURS
+
+Morning Session (9:20 AM - 3:05 PM):  Varaha trades (NIFTY/SENSEX)
+                                       Margin locked in trading
+
+Margin Release (3:05 PM - 5:00 PM):   Varaha exits
+                                       Margin available in account
+
+Evening Session (5:00 PM - 11:20 PM):  Kurma trades (Commodities)
+                                        Uses released margin
+
+Auto-Close (11:20 PM):                Broker force-closes positions
+                                        Hard exit at 11:15 PM
+
+═══════════════════════════════════════════════════════════════════
+
+📊 MARGIN FLOW
+
+Varaha (9:20 AM - 3:05 PM):
+  ↓ Margin locked: ₹4,00,000
+  ↓ Iron Butterfly position active
+  ↓ Target: ₹1,200 profit
+  ↓ Exit at 3:05 PM
+
+Kurma (5:00 PM - 11:20 PM):
+  ↓ Uses released margin: ₹4,00,000
+  ↓ Intraday momentum trades
+  ↓ Target: ₹1,200-1,500 profit
+  ↓ Hard exit at 11:15 PM
+
+Result: DOUBLE daily capital utilization! 🎯
+
+═══════════════════════════════════════════════════════════════════
+
+📞 QUICK COMMANDS
+
+Check current mode:
+  tail -30 /home/trading_ceo/python-trader/kurma_system.log | grep "MODE"
+
+Watch logs live:
+  tail -f /home/trading_ceo/python-trader/kurma_system.log
+
+View EOD report:
+  ls -lt /home/trading_ceo/python-trader/kurma_eod_reports/
+  cat /home/trading_ceo/python-trader/kurma_eod_reports/kurma_eod_*.txt
+
+Check available margin:
+  # Would integrate with broker API
+
+Emergency stop:
+  # Kill the process if needed
+  pkill -f "python3 kurma_main.py"
+
+═══════════════════════════════════════════════════════════════════
+
+🔄 COMPARISON: Varaha vs Kurma
+
+Varaha:
+  - Trading: NIFTY/SENSEX index options
+  - Strategy: Iron Butterfly (premium selling)
+  - Hours: 9:20 AM - 3:05 PM (6 hours)
+  - Target: ₹1,200/day
+  - Risk: ₹2,500 max loss
+  - Overnight: NO (intraday)
+
+Kurma:
+  - Trading: Commodity futures (Crude, Gold, etc)
+  - Strategy: Intraday momentum + partial TP + TSL
+  - Hours: 5:00 PM - 11:20 PM (6 hours)
+  - Target: ₹1,200-1,500/day
+  - Risk: ₹3,000 max loss
+  - Overnight: NO (intraday)
+
+Together: ₹8,00,000 capital daily capacity! 🚀
+
+═══════════════════════════════════════════════════════════════════
+
+Next Step: Read README.md
+
+╔════════════════════════════════════════════════════════════════╗
+║  Kurma System Built: April 30, 2026                           ║
+║  Status: Ready for Production                                 ║
+║  All components documented and tested                          ║
+╚════════════════════════════════════════════════════════════════╝

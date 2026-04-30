@@ -1,0 +1,206 @@
+# 🐢 Kurma Configuration
+# MCX Intraday Trading Bot (5:00 PM - 11:20 PM IST)
+
+# Global settings
+global:
+  name: "Kurma - MCX Intraday Bot"
+  version: "1.0"
+  mode: "paper"  # dry-run, paper, live
+  timezone: "Asia/Kolkata"
+  log_file: "/home/trading_ceo/python-trader/kurma_system.log"
+  cron_log: "/home/trading_ceo/python-trader/kurma_cron.log"
+
+# Instrument selector configuration
+selector:
+  min_score_threshold: 2.0        # TEMP: Testing actual order placement to broker
+  lookback_minutes: 60            # Use 60 min of 5-min candles for analysis
+
+  # Scoring weights
+  weights:
+    trend_strength: 0.5           # 50% - Most important
+    volatility_liquidity: 0.3     # 30% - Second most
+    directional_bias: 0.2         # 20% - Confirmation
+
+# Per-instrument parameters
+instruments:
+  CRUDEOILM:
+    display_name: "Crude Oil Mini"
+    lot_size: 10                  # barrels
+    points_to_rupees: 10          # Each point = ₹10
+    margin_required: 1456         # INR (approx, mini = 1/10th of full)
+
+    # Position sizing (intraday)
+    position_size: 1.0            # contracts (1.0 = 1 contract = 10 barrels)
+    position_size_peak_hours: 4.0 # 6 PM - 10 PM: can trade 4 contracts (more capital efficient)
+
+    # Take profit levels (in points)
+    tp_1_points: 100              # 50% exit at +100 points (+₹500)
+    tp_1_percentage: 0.5          # 50% of position
+
+    tp_2_points: 150              # 25% exit at +150 points (+₹750)
+    tp_2_percentage: 0.25         # 25% of position
+
+    # Trailing stop loss (remaining 25%)
+    tsl_points: 30                # Trail 30 points behind high (can adjust to 25-30)
+    tsl_percentage: 0.25          # 25% of position
+
+    # Risk management
+    stop_loss: 40                 # Hard stop at -40 points (-₹400)
+    max_loss_per_trade: 400       # ₹400
+
+    # Entry signals (allowed)
+    allowed_signals:
+      - support_bounce
+      - momentum_breakout
+
+    # Thresholds
+    min_volume_at_entry: 5000      # contracts/minute
+    max_spread_at_entry: 5         # paise
+
+  GOLDM:
+    display_name: "Gold Mini"
+    lot_size: 100                 # grams
+    points_to_rupees: 100         # Each point = ₹100
+    margin_required: 3000
+
+    position_size: 1.0
+    position_size_peak_hours: 1.0
+
+    tp_1_points: 50
+    tp_1_percentage: 0.5
+
+    tp_2_points: 100
+    tp_2_percentage: 0.25
+
+    tsl_points: 20
+    tsl_percentage: 0.25
+
+    stop_loss: 15
+    max_loss_per_trade: 1500
+
+    allowed_signals:
+      - support_bounce
+
+    min_volume_at_entry: 2000
+    max_spread_at_entry: 2
+
+  SILVERM:
+    display_name: "Silver Mini"
+    lot_size: 5                   # kg
+    points_to_rupees: 5000        # Each point = ₹5,000
+    margin_required: 15000
+
+    position_size: 1.0
+    position_size_peak_hours: 1.0
+
+    tp_1_points: 75
+    tp_1_percentage: 0.5
+
+    tp_2_points: 125
+    tp_2_percentage: 0.25
+
+    tsl_points: 30
+    tsl_percentage: 0.25
+
+    stop_loss: 25
+    max_loss_per_trade: 1500
+
+    allowed_signals:
+      - support_bounce
+      - momentum_breakout
+
+    min_volume_at_entry: 1000
+    max_spread_at_entry: 5
+
+  NATGASM:
+    display_name: "Natural Gas Mini"
+    lot_size: 250                 # MMBtu
+    points_to_rupees: 25          # Each 0.1 point = ₹25
+    margin_required: 7000
+
+    position_size: 0.5            # Reduced due to high volatility
+    position_size_peak_hours: 1.0
+
+    tp_1_points: 50
+    tp_1_percentage: 0.5
+
+    tp_2_points: 75
+    tp_2_percentage: 0.25
+
+    tsl_points: 25
+    tsl_percentage: 0.25
+
+    stop_loss: 20
+    max_loss_per_trade: 1500
+
+    allowed_signals:
+      - momentum_breakout
+
+    min_volume_at_entry: 1000
+    max_spread_at_entry: 10
+
+# Risk management (global)
+risk_management:
+  max_daily_loss: 3000           # ₹3,000 - hard stop if reached
+  max_daily_trades: 5            # Max 5 trades per session
+  max_concurrent_trades: 1       # One trade at a time (sequential)
+
+  # Position management
+  max_position_size_total: 2.0   # Max ₹2,00,000 notional at any time
+
+  # Time-based
+  trading_start: "17:00"         # 5:00 PM IST
+  trading_end: "23:15"           # 11:15 PM IST (15 min before auto-close)
+  final_exit_time: "23:15"       # Hard exit by 11:15 PM
+  auto_squareoff_time: "23:20"   # Broker auto-squareoff at 11:20 PM
+
+# Entry strategy parameters
+entry_strategy:
+  support_bounce:
+    enabled: true
+    description: "Buy at support bounce"
+    # Parameters would go here
+    confidence_threshold: 0.6
+
+  momentum_breakout:
+    enabled: true
+    description: "Breakout above resistance"
+    confidence_threshold: 0.7
+
+# Broker configuration
+brokers:
+  default_data: "flattrade"      # Flattrade has zero brokerage
+  default_exec: "flattrade"
+
+  flattrade:
+    brokerage: 0                 # Zero brokerage!
+    enabled: true
+
+  shoonya:
+    brokerage: 5                 # ₹5 per order
+    enabled: false
+
+  yfinance:
+    brokerage: 0                 # No brokerage, spot prices only
+    enabled: false
+
+# Notifications
+notifications:
+  enabled: true
+  trade_entry: true             # Notify on entry
+  tp_hit: true                  # Notify on take profit
+  sl_hit: true                  # Notify on stop loss
+  daily_summary: true           # EOD summary
+
+# Logging
+logging:
+  level: "INFO"                 # DEBUG, INFO, WARNING, ERROR
+  detailed_trade_logging: true  # Log every tick
+  save_trade_history: true      # Persist all trades to CSV
+
+# Advanced options
+advanced:
+  backtest_mode: false
+  paper_trade_mode: true
+  enable_ml_predictions: true   # Use ML for next-day instrument prediction
+  correlation_analysis: true    # Analyze trade correlations
