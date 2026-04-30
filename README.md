@@ -139,7 +139,17 @@ See [SAFETY.md](./SAFETY.md) for details.
 - **[CLI_REFERENCE.md](./CLI_REFERENCE.md)** — All command-line parameters
 - **[SAFETY.md](./SAFETY.md)** — Safety mechanisms & rules
 - **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** — Common issues & fixes
+- **[BROKER_AUTHENTICATION_GUIDE.md](./BROKER_AUTHENTICATION_GUIDE.md)** — OAuth setup, token generation
 - **[CLAUDE.md](./CLAUDE.md)** — For future AI agents
+
+### Testing & Validation
+- **[BROKER_API_TESTING_GUIDE.md](../BROKER_API_TESTING_GUIDE.md)** — Comprehensive test file reference
+  - Running broker configuration tests
+  - Token generation automation (GetAuthcode.py)
+  - OHLC data validation (TPSeries tests)
+  - Margin API verification
+  - Integration with Kurma data flows
+  - Common test failures & debugging
 
 ---
 

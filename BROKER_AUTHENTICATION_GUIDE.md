@@ -122,6 +122,113 @@ python3 kurma/kurma_main.py --dry-run
 
 ---
 
+## Testing Broker API Integration
+
+Before running Kurma in production, verify broker connectivity and OHLC data feeds using the test suite.
+
+### Quick Verification
+
+```bash
+# 1. Test broker configuration
+cd /home/trading_ceo/python-trader/ShoonyaApi-py/tests
+python3 -m pytest test_broker_config.py -v
+
+# 2. Generate fresh OAuth token (Shoonya only)
+cd /home/trading_ceo/python-trader/Shoonya_oAuthAPI-py
+python3 GetAuthcode.py
+
+# 3. Test OHLC data retrieval (MCX Crude Oil)
+python3 << 'EOF'
+from api_helper import NorenApiPy
+import yaml
+
+with open('cred.yml') as f:
+    cred = yaml.safe_load(f)
+
+api = NorenApiPy()
+if api.set_session(userid=cred['UID'], accesstoken=cred['Access_token']):
+    # CRUDEOILM token: 488291
+    ohlc = api.get_time_price_series(
+        exchange='MCX',
+        token='488291',
+        starttime=1719792600,
+        endtime=1719796200,
+        interval=5
+    )
+    print(f"✅ OHLC Retrieved: {len(ohlc) if ohlc else 0} candles")
+else:
+    print("❌ Session failed")
+EOF
+
+# 4. Test margin API
+python3 << 'EOF'
+from api_helper import NorenApiPy
+import yaml
+
+with open('cred.yml') as f:
+    cred = yaml.safe_load(f)
+
+api = NorenApiPy()
+if api.set_session(userid=cred['UID'], accesstoken=cred['Access_token']):
+    limits = api.get_limits()
+    if limits.get('stat') == 'Ok':
+        print(f"✅ Margin Available: ₹{float(limits.get('cash')):,.2f}")
+    else:
+        print(f"❌ Margin fetch failed: {limits}")
+else:
+    print("❌ Session failed")
+EOF
+```
+
+### Running Full Test Suite
+
+```bash
+cd /home/trading_ceo/python-trader
+
+# All broker configuration tests
+python3 -m pytest ShoonyaApi-py/tests/test_broker_config.py -v
+
+# Orbiter broker tests (advanced)
+python3 -m pytest orbiter/tests/brokers/ -v
+
+# OHLC data tests (MCX, BFO, NFO)
+python3 -m pytest orbiter/tests/brokers/test_tpSeries.py -v
+```
+
+### Expected Test Results
+
+✅ **Configuration Test PASS:**
+```
+test_broker_config.py::TestBrokerConfig::test_get_shoonya_config PASSED
+test_broker_config.py::TestBrokerConfig::test_simulation_get_funds PASSED
+======================== 10 passed in 0.23s ========================
+```
+
+✅ **Token Generation Success:**
+```
+[SUCCESS] Chrome driver created using: /usr/bin/google-chrome-stable
+✅ Auth code captured: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+✅ Access token generated successfully!
+✅ cred.yml updated with new access token!
+```
+
+✅ **OHLC Data Success:**
+```
+✅ OHLC Retrieved: 12 candles (1-min bars)
+Sample: [{'time': 1719792600, 'open': 9115.5, 'high': 9118.0, 'low': 9112.0, 'close': 9116.5, 'volume': 480}]
+```
+
+✅ **Margin Success:**
+```
+✅ Margin Available: ₹92,271.27
+```
+
+### Troubleshooting Test Failures
+
+See **[BROKER_API_TESTING_GUIDE.md](../BROKER_API_TESTING_GUIDE.md)** for detailed test file documentation and failure troubleshooting.
+
+---
+
 ## Troubleshooting by Broker
 
 ### Shoonya Issues
