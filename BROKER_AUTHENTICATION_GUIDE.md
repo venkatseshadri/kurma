@@ -21,7 +21,7 @@ python3 kurma/kurma_main.py --data-broker shoonya --exec-broker shoonya
 
 **Token Refresh:**
 ```bash
-cd /home/trading_ceo/python-trader/Shoonya_oAuthAPI-py
+cd /home/trading_ceo/projects/python-trader/Shoonya_oAuthAPI-py
 python3 GetAuthcode.py
 ```
 
@@ -130,11 +130,11 @@ Before running Kurma in production, verify broker connectivity and OHLC data fee
 
 ```bash
 # 1. Test broker configuration
-cd /home/trading_ceo/python-trader/ShoonyaApi-py/tests
+cd /home/trading_ceo/projects/python-trader/ShoonyaApi-py/tests
 python3 -m pytest test_broker_config.py -v
 
 # 2. Generate fresh OAuth token (Shoonya only)
-cd /home/trading_ceo/python-trader/Shoonya_oAuthAPI-py
+cd /home/trading_ceo/projects/python-trader/Shoonya_oAuthAPI-py
 python3 GetAuthcode.py
 
 # 3. Test OHLC data retrieval (MCX Crude Oil)
@@ -183,7 +183,7 @@ EOF
 ### Running Full Test Suite
 
 ```bash
-cd /home/trading_ceo/python-trader
+cd /home/trading_ceo/projects/python-trader
 
 # All broker configuration tests
 python3 -m pytest ShoonyaApi-py/tests/test_broker_config.py -v
@@ -237,7 +237,7 @@ See **[BROKER_API_TESTING_GUIDE.md](../BROKER_API_TESTING_GUIDE.md)** for detail
 **Cause:** Access token expired (>30 days old)  
 **Fix:**
 ```bash
-cd /home/trading_ceo/python-trader/Shoonya_oAuthAPI-py
+cd /home/trading_ceo/projects/python-trader/Shoonya_oAuthAPI-py
 python3 GetAuthcode.py
 ```
 

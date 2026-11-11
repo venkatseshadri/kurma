@@ -27,7 +27,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - KURMA - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("/home/trading_ceo/python-trader/kurma_system.log"),
+        logging.FileHandler("/home/trading_ceo/projects/python-trader/kurma_system.log"),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -151,12 +151,16 @@ class KurmaOrchestrator:
         mcx_open = time(17, 0)   # 5:00 PM
         mcx_close = time(23, 30)  # 11:30 PM
 
-        # Trading days: Monday (0) to Friday (4)
-        is_trading_day = datetime.now().weekday() < 5
+        # Trading days: holiday-aware for MCX, not just Mon-Fri.
+        try:
+            from market_calendar import is_trading_day as _mcx_trading_day
+            is_trading_day = _mcx_trading_day(datetime.now().date(), "MCX")
+        except Exception as _e:
+            logger.warning(f"market_calendar unavailable ({_e}) - weekday-only")
+            is_trading_day = datetime.now().weekday() < 5
 
         if not is_trading_day:
-            logger.info("🛑 WEEKEND - No trading today")
-            logger.info("   Kurma runs Monday-Friday only (evenings)")
+            logger.info("🛑 MCX CLOSED (weekend or holiday) - No trading today")
             return False
 
         if current_time < mcx_open:

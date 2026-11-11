@@ -16,7 +16,7 @@
 
 ### 2. Installation
 ```bash
-cd /home/trading_ceo/python-trader
+cd /home/trading_ceo/projects/python-trader
 pip install -r requirements.txt
 ```
 
@@ -186,18 +186,18 @@ See [SAFETY.md](./SAFETY.md) for details.
 
 ### Check Logs
 ```bash
-tail -f /home/trading_ceo/python-trader/kurma_system.log
+tail -f /home/trading_ceo/projects/python-trader/kurma_system.log
 ```
 
 ### View EOD Report
 ```bash
-ls -lt /home/trading_ceo/python-trader/kurma_eod_reports/ | head
-cat /home/trading_ceo/python-trader/kurma_eod_reports/kurma_eod_*.txt
+ls -lt /home/trading_ceo/projects/python-trader/kurma_eod_reports/ | head
+cat /home/trading_ceo/projects/python-trader/kurma_eod_reports/kurma_eod_*.txt
 ```
 
 ### Monitor Position
 ```bash
-grep "TRANCHE\|EXIT" /home/trading_ceo/python-trader/kurma_system.log
+grep "TRANCHE\|EXIT" /home/trading_ceo/projects/python-trader/kurma_system.log
 ```
 
 ---

@@ -21,7 +21,7 @@
 
 4. SOMETHING BROKE?
    → TROUBLESHOOTING.md (common issues & fixes)
-   → Check logs: tail -50 /home/trading_ceo/python-trader/kurma_system.log
+   → Check logs: tail -50 /home/trading_ceo/projects/python-trader/kurma_system.log
 
 5. FOR FUTURE AI AGENTS:
    → CLAUDE.md        (architecture for Claude Code instances)
@@ -31,7 +31,7 @@
 🚀 QUICK START (5 minutes)
 
 # Test (safe, fully mocked)
-cd /home/trading_ceo/python-trader
+cd /home/trading_ceo/projects/python-trader
 ./run_kurma.sh dry-run
 
 # Monitor (real data, no orders)
@@ -156,14 +156,14 @@ Result: DOUBLE daily capital utilization! 🎯
 📞 QUICK COMMANDS
 
 Check current mode:
-  tail -30 /home/trading_ceo/python-trader/kurma_system.log | grep "MODE"
+  tail -30 /home/trading_ceo/projects/python-trader/kurma_system.log | grep "MODE"
 
 Watch logs live:
-  tail -f /home/trading_ceo/python-trader/kurma_system.log
+  tail -f /home/trading_ceo/projects/python-trader/kurma_system.log
 
 View EOD report:
-  ls -lt /home/trading_ceo/python-trader/kurma_eod_reports/
-  cat /home/trading_ceo/python-trader/kurma_eod_reports/kurma_eod_*.txt
+  ls -lt /home/trading_ceo/projects/python-trader/kurma_eod_reports/
+  cat /home/trading_ceo/projects/python-trader/kurma_eod_reports/kurma_eod_*.txt
 
 Check available margin:
   # Would integrate with broker API

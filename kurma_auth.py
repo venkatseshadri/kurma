@@ -15,8 +15,8 @@ from datetime import datetime
 
 # Add parent paths for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
-sys.path.insert(0, '/home/trading_ceo/python-trader/FlattradeApi-py')
-sys.path.insert(0, '/home/trading_ceo/python-trader/NorenRestApiPy')
+sys.path.insert(0, '/home/trading_ceo/projects/python-trader/FlattradeApi-py')
+sys.path.insert(0, '/home/trading_ceo/projects/python-trader/NorenRestApiPy')
 
 try:
     from api_helper import NorenApiPy
@@ -73,15 +73,15 @@ class KurmaConnect:
         """Load Flattrade credentials from YAML"""
 
         cred_paths = [
-            '/home/trading_ceo/python-trader/flattrade_cred.yml',
-            '/home/trading_ceo/python-trader/FlattradeApi-py/cred.yml',
+            '/home/trading_ceo/projects/python-trader/flattrade_cred.yml',
+            '/home/trading_ceo/projects/python-trader/FlattradeApi-py/cred.yml',
             os.path.expanduser('~/.flattrade/cred.yml')
         ]
 
         # Hardcoded defaults for development/testing
         default_creds = {
             'user_id': 'FT055702',
-            'password': 'Taknev80*$$$',
+            'password': 'Taknev80$$$$',
             'api_key': '37d30474def84eb1a0666f1dc2bc0e4f',
             'totp_secret': 'HQ5233H3XG5YEWZ3F47CJ43XON6755AR'
         }

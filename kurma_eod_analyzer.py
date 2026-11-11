@@ -17,7 +17,7 @@ class KurmaEODAnalyzer:
 
     def __init__(self, config):
         self.config = config
-        self.report_dir = Path('/home/trading_ceo/python-trader/kurma_eod_reports')
+        self.report_dir = Path('/home/trading_ceo/projects/python-trader/kurma_eod_reports')
         self.report_dir.mkdir(exist_ok=True)
 
     def analyze_session(self, trades, selected_instrument):
